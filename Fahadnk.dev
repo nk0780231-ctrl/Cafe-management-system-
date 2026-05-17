@@ -1,62 +1,95 @@
-[Project]
-FileName=Fahadnk.dev
-Name=Fahadnk
-Type=1
-Ver=2
-ObjFiles=
-Includes=
-Libs=
-PrivateResource=
-ResourceIncludes=
-MakeIncludes=
-Compiler=
-CppCompiler=
-Linker=
-IsCpp=1
-Icon=
-ExeOutput=
-ObjectOutput=
-LogOutput=
-LogOutputEnabled=0
-OverrideOutput=0
-OverrideOutputName=
-HostApplication=
-UseCustomMakefile=0
-CustomMakefile=
-CommandLine=
-Folders=
-IncludeVersionInfo=0
-SupportXPThemes=0
-CompilerSet=0
-CompilerSettings=0000000000000000000000000
-UnitCount=1
+#include <iostream>
+#include <string>
+using namespace std;
 
-[VersionInfo]
-Major=1
-Minor=0
-Release=0
-Build=0
-LanguageID=1033
-CharsetID=1252
-CompanyName=
-FileVersion=
-FileDescription=Developed using the Dev-C++ IDE
-InternalName=
-LegalCopyright=
-LegalTrademarks=
-OriginalFilename=
-ProductName=
-ProductVersion=
-AutoIncBuildNr=0
-SyncProduct=1
+// Base Class
+class Cafe
+{
+protected:
+    string itemName[5] = {"Burger", "Pizza", "Coffee", "Sandwich", "Fries"};
+    int itemPrice[5] = {500, 1200, 250, 400, 300};
 
-[Unit1]
-FileName=main.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+public:
+    // Function to display menu
+    void showMenu()
+    {
+        cout << "\n========= CAFE MENU =========\n";
+        for (int i = 0; i < 5; i++)
+        {
+            cout << i + 1 << ". " << itemName[i]
+                 << " - Rs. " << itemPrice[i] << endl;
+        }
+        cout << "=============================\n";
+    }
+};
 
+// Derived Class
+class Order : public Cafe
+{
+private:
+    int totalBill = 0;
+
+public:
+    // Function for taking order
+    void takeOrder()
+    {
+        int choice, quantity;
+        char more;
+
+        do
+        {
+            showMenu();
+
+            cout << "\nEnter item number: ";
+            cin >> choice;
+
+            cout << "Enter quantity: ";
+            cin >> quantity;
+
+            // Validation
+            if (choice >= 1 && choice <= 5)
+            {
+                int cost = itemPrice[choice - 1] * quantity;
+
+                cout << "\nYou ordered: "
+                     << itemName[choice - 1]
+                     << " x " << quantity << endl;
+
+                cout << "Cost = Rs. " << cost << endl;
+
+                totalBill += cost;
+            }
+            else
+            {
+                cout << "\nInvalid Choice!\n";
+            }
+
+            cout << "\nDo you want to order more? (y/n): ";
+            cin >> more;
+
+        } while (more == 'y' || more == 'Y');
+
+        generateBill();
+    }
+
+    // Polymorphism (Virtual Function)
+    virtual void generateBill()
+    {
+        cout << "\n========== FINAL BILL ==========\n";
+        cout << "Total Amount = Rs. " << totalBill << endl;
+        cout << "Thank You For Visiting Our Cafe!\n";
+        cout << "================================\n";
+    }
+};
+
+// Main Function
+int main()
+{
+    Order customer;
+
+    cout << "WELCOME TO CAFE MANAGEMENT SYSTEM\n";
+
+    customer.takeOrder();
+
+    return 0;
+}
